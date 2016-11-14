@@ -23,6 +23,7 @@ Normal Nucleoli, Mitoses
 import numpy as np
 import pandas as pd
 from sklearn import preprocessing, cross_validation, neighbors
+from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
 
@@ -53,29 +54,34 @@ def create_data_set(df):
 # Determine the best model for the data
 def best_model(model='KNN_model'):
     X_train,X_test,y_train,y_test = create_data_set(get_data())
+
     # Create the model for KNN and fit the training data to it
     KNN_model = neighbors.KNeighborsClassifier().fit(X_train,y_train)
     Naive_Bayes_model = GaussianNB().fit(X_train,y_train)
     LogisticRegression_model = LogisticRegression().fit(X_train,y_train)
+    SVM_model = SVC().fit(X_train,y_train)
+
+    clf_models = [KNN_model, Naive_Bayes_model,
+                  LogisticRegression_model, SVM_model]
+
     # Determine model accuracy with testing data
     KNN_acc = KNN_model.score(X_test, y_test)
     Naive_Bayes_acc = Naive_Bayes_model.score(X_test,y_test)
     LogisticRegression_acc = LogisticRegression_model.score(X_test,y_test)
-    scores = [KNN_acc,Naive_Bayes_acc,LogisticRegression_acc]
-    print('KNN acc:{}, NB acc:{}, LG acc: {}'.format(KNN_acc,Naive_Bayes_acc,
-                                                     LogisticRegression_acc))
+    SVM_acc = SVM_model.score(X_test,y_test)
+
+    scores = [KNN_acc,Naive_Bayes_acc,LogisticRegression_acc,SVM_acc]
+
+    models = ['K Nearest Neighbors', 'Naive Bayes','Logistic Regression',
+              'Support Vector Machine']
+    print('KNN acc:{}, NB acc:{},\nLG acc: {}, SVM acc:{}'.format(KNN_acc,
+                                                                 Naive_Bayes_acc,
+                                                     LogisticRegression_acc,
+                                                                 SVM_acc))
     # Geth the model with the highest score
     value, idx = max([val,idx] for idx,val in enumerate(scores))
-    
-    if idx == 0:
-        print('K Nearest Neighbors is the best classifier')
-        return  KNN_model
-    elif idx == 1:
-        print('Naive Bayes is the best classifier')
-        return Naive_Bayes_model
-    elif idx == 2:
-        print('Logistic Regression is the best classifier')
-        return LogisticRegression_model    
+    print('{} is the best classifier'.format(models[idx]))
+    return clf_models[idx]
 
 # Use the model to predict if you have a tumor
 def predict(ct,ucsi,ucsh,ma,secs,bn,bc,nn,m):
