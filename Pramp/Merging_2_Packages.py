@@ -1,52 +1,46 @@
 """
-Merging 2 Packages
+Find two integers that sum to one 
 
-Given a package with a weight limit and an array arr of item weights, how can
-you most efficiently find two items with sum of weights that equals the weight
-limit?
+Given an array A of integers and an integer N, return the index of two integers
+in A such that ai+aj = N for i and j in A. Return -1 if no such integers exists.
+Determine space and time complexity.
 
-Your function should return 2 such indices of item weights or -1 if such pair
-doesn't exist.
-What is the runtime and space complexity of your solution?
+Example:
+A = [5,3,7,0,1,4,2]
+N = 6
+return 0,4
+
+Bonus: Return the values in A that sum to N
 """
 
 # Brute force
-# Space complexity  -   O(n^2): Using a double for loop
-# Time complexity   -   O(1):   Only keeping the index values i and j in memory
-def bruteMerge(arr,lim):
-    for i in range(len(arr)):
-        for j in range(1,len(arr)):
-            if arr[i]+arr[j]==lim:
+# Time complexity   -   O(n^2): Using a double for loop
+# Space complexity  -   O(1):   Only keeping the index values i and j in memory
+def brutePairSum(A,N):
+    for i in range(len(A)):
+        for j in range(1,len(A)):
+            if A[i]+A[j]==N:
                 return [i,j]
     return -1
 
 # Efficient
-def efficientMerge(arr,lim):
+# We are looking for two values ai+aj = N, so we can solve for one of them
+# and look for the other. ai = N - ajCollect elements in a hash map
+# Time complexity   - O(n): Length of the Aay
+# Space complexity  - O(n): Hasing the Aay
+def efficientPairSum(A,N):
     h = dict()
-    for i in range(len(arr)-1):
-        t = arr[i]+arr[i+1]
-        print(t)
-        if t not in h:
-            h[t] = [i,i+1]
-        if t == lim:
-            return h[t]
-    print(h)
-    return -1
-
-def fcw(arr,lim):
-    h = dict()
-    for i,v in enumerate(arr):
-        if (lim-v) in h:
-            c = h[lim-v]
-        if c!=None:
-            return [i,c]
-        else:
-            h[w] = v
+    for i in range(len(A)):
+        ai = N-A[i]
+        if ai in h:
+            return j,h[ai]   # Return the index
+            #return ai,A[i] # Return the array values
+        h[A[i]] = i
     return -1
 
 if __name__ == '__main__':
-    arr = [1,2,3,4,54,5,67,7,8]
-    lim = 56
-    print(bruteMerge(arr,lim)) # Ans = [1,4]
-    print(efficientMerge(arr,lim)) # Ans = [1,4]
-    print(fcw(arr,lim))
+    A = [5,3,7,0,1,4,2]
+    N = 6
+    print(brutePairSum(A,N))    # Ans = [0,4]
+    print(efficientPairSum(A,N))# Ans = (0,4)
+    

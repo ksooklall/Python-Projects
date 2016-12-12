@@ -29,6 +29,11 @@ Correct solution must involve O(log n) runtime complexity
     print(BinarySearchTree(a,n))
 """
 
+# Part 1 Solution: Since the array is already sorted, a binary search is an optmial
+# approach
+# Binary search tree algorithm
+# T: O(log(n))
+# S: O(1)
 def BinarySearchTree(arr,leftS, rightS, num):
    left = leftS
    right = rightS
@@ -42,15 +47,40 @@ def BinarySearchTree(arr,leftS, rightS, num):
          right = mid-1
    return -1
 
-def getShiftedIndex(arr):
+# Part 2 Solution: Find where the shift occured and apply binary search on
+# both sides. There are two way to find where the shift has occured.
+
+# Linear search, starting from the right side os the array and checking
+# when arr[i] < arr[i-1]
+# T: O(k) where k is the number of shifted elements, worst case k = n-1
+# S: O(1)
+
+def getShiftedIndexLinear(arr):
    l = len(arr)
    for i in range(1,len(arr)):
       if arr[-i]-arr[-i-1]<0:
          index = i
    return len(arr)-index
 
+# Modified Binary search, keep splitting the array until arr[mid] < arr[mid-1]
+# T: O(log(n)) Similar to binary search
+# S: O(1)
+def getShiftedIndexBS(arr):
+   left = 0
+   right = len(arr)
+   while (left <= right):
+      m = (left+right)//2
+      if (arr[m] < arr[m-1]):
+         return m
+      if arr[m]>arr[0]:
+         left = m + 1
+      else:
+         right = m - 1
+   return 0
+
+# Once the shift location is known apply BST on both sides of the shift
 def BSTShifted(arr,num):
-   shifted = getShiftedIndex(arr)
+   shifted = getShiftedIndexBS(arr)
    left = BinarySearchTree(arr,0,shifted-1,num)
    right = BinarySearchTree(arr,shifted,len(arr)-1,num)
    if left != -1: return left

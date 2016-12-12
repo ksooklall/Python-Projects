@@ -10,6 +10,9 @@ Explain and code the most efficient solution possible, and analyze its runtime
 and space complexity.
 """
 
+# The simplest way of finding n combination in an array is to make n for loops
+# T: O(n^4) OUCH!!!
+# S: O(
 def inefficient(arr,s):
     for i in range(len(arr)-3):
         for j in range(1,len(arr)-2):
