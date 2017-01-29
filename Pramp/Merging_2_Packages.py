@@ -33,7 +33,7 @@ def efficientPairSum(A,N):
     for i in range(len(A)):
         ai = N-A[i]
         if ai in h:
-            return j,h[ai]   # Return the index
+            return i,h[ai]   # Return the index
             #return ai,A[i] # Return the array values
         h[A[i]] = i
     return -1

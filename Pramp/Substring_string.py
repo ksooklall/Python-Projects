@@ -1,4 +1,4 @@
-""" Given a string S and an array A find the first occurance of in the string
+""" Given a string and an array find the first occurance in the string
 containing all elements of the array A
 """
 
